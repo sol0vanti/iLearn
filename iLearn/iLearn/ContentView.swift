@@ -64,7 +64,15 @@ struct PlayModeView: View {
     var selectedTheme: String
     var body: some View {
         NavigationStack {
-            Text("no code")
+            Button {
+                    
+            } label: {
+                Text("Add")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.bordered)
+            .padding(.horizontal, 25)
+            Spacer()
         }
         .navigationTitle(selectedTheme)
     }
