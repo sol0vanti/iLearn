@@ -8,9 +8,10 @@
 import SwiftUI
 import CoreData
 
-class CoreDataViewModel: ObservableObject {
+class CoreDataManager {
+    static let instance = CoreDataManager()
     let container: NSPersistentContainer
-    @Published var savedEntities: [ThemeEntity] = []
+    let context: NSManagedObjectContext
     
     init() {
         container = NSPersistentContainer(name: "ThemesContainer")
@@ -19,6 +20,23 @@ class CoreDataViewModel: ObservableObject {
                 print(error.localizedDescription)
             }
         }
+        context = container.viewContext
+    }
+    
+    func save() {
+        do {
+            try context.save()
+        } catch let error {
+            print(error)
+        }
+    }
+}
+
+class CoreDataRelationshipViewModel: ObservableObject {
+    let manager = CoreDataManager.instance
+    @Published var themes: [ThemeEntity] = []
+    
+    init() {
         fetchThemes()
     }
     
@@ -26,25 +44,21 @@ class CoreDataViewModel: ObservableObject {
         let request = NSFetchRequest<ThemeEntity>(entityName: "ThemeEntity")
         
         do {
-            savedEntities = try container.viewContext.fetch(request)
+            themes = try manager.context.fetch(request)
         } catch let error {
             print(error)
         }
     }
     
     func addTheme(name: String) {
-        let newTheme = ThemeEntity(context: container.viewContext)
+        let newTheme = ThemeEntity(context: manager.context)
         newTheme.name = name
         saveData()
     }
     
     func saveData() {
-        do {
-            try container.viewContext.save()
-            fetchThemes()
-        } catch let error {
-            print(error)
-        }
+        manager.save()
+        fetchThemes()
     }
 }
 
@@ -54,14 +68,14 @@ struct Theme: Identifiable {  // Create a "Theme" structure as an element list
 }
 
 struct ContentView: View {
-    @StateObject var vm = CoreDataViewModel()
+    @StateObject var vm = CoreDataRelationshipViewModel()
     @State private var showCreateAlert: Bool = false
     @State private var titleThemeTextFieldText: String = ""
     
     var body: some View {
         NavigationStack {
             List {
-                ForEach(vm.savedEntities) { theme in // Loop all theme in saved themes entities
+                ForEach(vm.themes) { theme in // Loop all theme in saved themes entities
                     NavigationLink { // Go to the "PlayModeView" on element click
                         PlayModeView(selectedTheme: theme.name!)
                     } label: {

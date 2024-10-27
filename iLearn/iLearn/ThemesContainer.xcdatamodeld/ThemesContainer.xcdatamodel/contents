@@ -2,5 +2,10 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23173.10" systemVersion="24A348" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="ThemeEntity" representedClassName="ThemeEntity" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="words" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WordsEntity" inverseName="theme" inverseEntity="WordsEntity"/>
+    </entity>
+    <entity name="WordsEntity" representedClassName="WordsEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="text" optional="YES" attributeType="String"/>
+        <relationship name="theme" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ThemeEntity" inverseName="words" inverseEntity="ThemeEntity"/>
     </entity>
 </model>
