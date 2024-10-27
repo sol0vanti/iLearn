@@ -77,7 +77,7 @@ struct ContentView: View {
             List {
                 ForEach(vm.themes) { theme in // Loop all theme in saved themes entities
                     NavigationLink { // Go to the "PlayModeView" on element click
-                        PlayModeView(selectedTheme: theme.name!)
+                        PlayModeView(entity: theme, selectedTheme: theme.name!)
                     } label: {
                         Text(theme.name!) // Create a title for List element
                     }
@@ -112,11 +112,19 @@ struct ContentView: View {
 }
 
 struct PlayModeView: View {
+    let entity: ThemeEntity
     var selectedTheme: String
     var body: some View {
         NavigationStack {
+            if let words = entity.words?.allObjects as? [WordsEntity] {
+                Text("Words:")
+                    .bold()
+                ForEach(words) { word in
+                    Text(word.text ?? "error saving data")
+                }
+            }
             Button {
-                    
+                
             } label: {
                 Text("Add word")
                     .frame(maxWidth: .infinity)
