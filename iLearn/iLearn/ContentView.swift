@@ -35,9 +35,11 @@ class CoreDataManager {
 class CoreDataRelationshipViewModel: ObservableObject {
     let manager = CoreDataManager.instance
     @Published var themes: [ThemeEntity] = []
+    @Published var words: [WordEntity] = []
     
     init() {
         fetchThemes()
+        fetchWords()
     }
     
     func fetchThemes() {
@@ -50,15 +52,34 @@ class CoreDataRelationshipViewModel: ObservableObject {
         }
     }
     
+    func fetchWords() {
+        let request = NSFetchRequest<WordEntity>(entityName: "WordEntity")
+        
+        do {
+            words = try manager.context.fetch(request)
+        } catch let error {
+            print(error)
+        }
+    }
+    
     func addTheme(name: String) {
         let newTheme = ThemeEntity(context: manager.context)
         newTheme.name = name
         saveData()
     }
     
+    func addWord(mainWord: String, translatedWord: String, theme: ThemeEntity) {
+        let newWord = WordEntity(context: manager.context)
+        newWord.mainWord = mainWord
+        newWord.translatedWord = translatedWord
+        newWord.theme = theme
+        saveData()
+    }
+    
     func saveData() {
         manager.save()
         fetchThemes()
+        fetchWords()
     }
 }
 
@@ -77,7 +98,7 @@ struct ContentView: View {
             List {
                 ForEach(vm.themes) { theme in // Loop all theme in saved themes entities
                     NavigationLink { // Go to the "PlayModeView" on element click
-                        PlayModeView(entity: theme, selectedTheme: theme.name!)
+                        PlayModeView(entity: theme)
                     } label: {
                         Text(theme.name!) // Create a title for List element
                     }
@@ -112,28 +133,47 @@ struct ContentView: View {
 }
 
 struct PlayModeView: View {
+    @StateObject var vm = CoreDataRelationshipViewModel()
     let entity: ThemeEntity
-    var selectedTheme: String
+    @State var showAddWordAlert: Bool = false
+    @State var alertMainWordTextFieldText: String = ""
+    @State var alertTranslatedWordTextFieldText: String = ""
+    
     var body: some View {
         NavigationStack {
-            if let words = entity.words?.allObjects as? [WordsEntity] {
+            if let words = entity.words?.allObjects as? [WordEntity] {
                 Text("Words:")
                     .bold()
                 ForEach(words) { word in
-                    Text(word.text ?? "error saving data")
+                    Text("\(word.mainWord ?? "error saving data") - \(word.translatedWord ?? "error saving data")")
                 }
             }
             Button {
-                
+                showAddWordAlert = true
             } label: {
                 Text("Add word")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.bordered)
             .padding(.horizontal, 25)
+            .alert(
+                Text("Add new word"), // Title for the alert
+                isPresented: $showAddWordAlert // Switch on a variable
+            ) {
+                Button("Cancel", role: .cancel) {} // Cancel button
+                Button("Create") {
+                    if !alertMainWordTextFieldText.isEmpty && !alertTranslatedWordTextFieldText.isEmpty {
+                        vm.addWord(mainWord: alertMainWordTextFieldText, translatedWord: alertTranslatedWordTextFieldText, theme: self.entity)
+                        showAddWordAlert = false // Hide the alert
+                    }
+                }
+                
+                TextField("Main word", text: $alertMainWordTextFieldText)
+                TextField("Translated word", text: $alertTranslatedWordTextFieldText)
+            }
             Spacer()
         }
-        .navigationTitle(selectedTheme)
+        .navigationTitle(entity.name ?? "error retrieving data")
     }
 }
 
