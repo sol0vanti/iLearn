@@ -10,15 +10,40 @@ import CoreData
 
 class CoreDataViewModel: ObservableObject {
     let container: NSPersistentContainer
+    @Published var savedEntities: [ThemeEntity] = []
     
     init() {
         container = NSPersistentContainer(name: "ThemesContainer")
         container.loadPersistentStores { description, error in
             if let error = error {
                 print(error.localizedDescription)
-            } else {
-                print("Successfully loaded CoreData!")
             }
+        }
+        fetchThemes()
+    }
+    
+    func fetchThemes() {
+        let request = NSFetchRequest<ThemeEntity>(entityName: "ThemeEntity")
+        
+        do {
+            savedEntities = try container.viewContext.fetch(request)
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    func addTheme(name: String) {
+        let newTheme = ThemeEntity(context: container.viewContext)
+        newTheme.name = name
+        saveData()
+    }
+    
+    func saveData() {
+        do {
+            try container.viewContext.save()
+            fetchThemes()
+        } catch let error {
+            print(error)
         }
     }
 }
@@ -32,16 +57,15 @@ struct ContentView: View {
     @StateObject var vm = CoreDataViewModel()
     @State private var showCreateAlert: Bool = false
     @State private var titleThemeTextFieldText: String = ""
-    @State private var themes: [Theme] = []  // Set values for elements using "Theme" structure
     
     var body: some View {
         NavigationStack {
             List {
-                ForEach(themes) { theme in // Loop all theme in themes list
+                ForEach(vm.savedEntities) { theme in // Loop all theme in saved themes entities
                     NavigationLink { // Go to the "PlayModeView" on element click
-                        PlayModeView(selectedTheme: theme.name)
+                        PlayModeView(selectedTheme: theme.name!)
                     } label: {
-                        Text(theme.name) // Create a title for List element
+                        Text(theme.name!) // Create a title for List element
                     }
                 }
             }
@@ -59,7 +83,7 @@ struct ContentView: View {
                     Button("Cancel", role: .cancel) {} // Cancel button
                     Button("Create") {
                         if !titleThemeTextFieldText.isEmpty { // If the title is not equal nil ('!' at the begining) do the function
-                            themes.append(Theme(name: titleThemeTextFieldText))
+                            vm.addTheme(name: titleThemeTextFieldText)
                             showCreateAlert = false // Hide the alert
                         }
                     }
