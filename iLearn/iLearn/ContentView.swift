@@ -6,20 +6,33 @@
 //
 
 import SwiftUI
+import CoreData
+
+class CoreDataViewModel: ObservableObject {
+    let container: NSPersistentContainer
+    
+    init() {
+        container = NSPersistentContainer(name: "ThemesContainer")
+        container.loadPersistentStores { description, error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("Successfully loaded CoreData!")
+            }
+        }
+    }
+}
 
 struct Theme: Identifiable {  // Create a "Theme" structure as an element list
+    var id: String?
     let name: String
-    let id = UUID()
 }
 
 struct ContentView: View {
+    @StateObject var vm = CoreDataViewModel()
     @State private var showCreateAlert: Bool = false
     @State private var titleThemeTextFieldText: String = ""
-    @State private var themes = [  // Set values for elements using "Theme" structure
-        Theme(name: "Deutsch 1"),
-        Theme(name: "GER Lesson 1 HW"),
-        Theme(name: "English advanced C1")
-    ]
+    @State private var themes: [Theme] = []  // Set values for elements using "Theme" structure
     
     var body: some View {
         NavigationStack {
@@ -67,7 +80,7 @@ struct PlayModeView: View {
             Button {
                     
             } label: {
-                Text("Add")
+                Text("Add word")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.bordered)
