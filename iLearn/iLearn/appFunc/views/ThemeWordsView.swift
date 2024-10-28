@@ -17,12 +17,15 @@ struct ThemeWordsView: View {
     
     var body: some View {
         NavigationStack {
-            if let words = entity.words?.allObjects as? [WordEntity] {
+            if var words = entity.words?.allObjects as? [WordEntity] {
                 List {
                     if !words.isEmpty {
                         Section("Words:") {
                             ForEach(words) { word in
                                 Text("\(word.mainWord ?? "error saving data") - \(word.translatedWord ?? "error saving data")")
+                            } .onDelete { offsets in
+                                vm.deleteWord(at: offsets)
+                                words.remove(atOffsets: offsets)
                             }
                         }
                     } else {

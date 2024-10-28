@@ -52,6 +52,14 @@ class CoreDataRelationshipViewModel: ObservableObject {
         saveData()
     }
     
+    func deleteWord(at offsets: IndexSet) {
+        for index in offsets {
+            let wordToDelete = words[index]
+            manager.context.delete(wordToDelete)
+        }
+        saveData()
+    }
+    
     func saveData() {
         manager.save()
         fetchThemes()
