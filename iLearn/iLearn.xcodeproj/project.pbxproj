@@ -3,27 +3,52 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		704F95892CAB215000F253CC /* iLearnApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704F95882CAB215000F253CC /* iLearnApp.swift */; };
-		704F958B2CAB215000F253CC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704F958A2CAB215000F253CC /* ContentView.swift */; };
-		704F958D2CAB215100F253CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 704F958C2CAB215100F253CC /* Assets.xcassets */; };
 		704F95902CAB215100F253CC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 704F958F2CAB215100F253CC /* Preview Assets.xcassets */; };
-		707F8F342CB3062C009A69C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 707F8F332CB3062C009A69C8 /* GoogleService-Info.plist */; };
-		70F92B0B2CCE6C7F00CB3478 /* ThemesContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70F92B092CCE6C7F00CB3478 /* ThemesContainer.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		704F95852CAB215000F253CC /* iLearn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iLearn.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		704F95882CAB215000F253CC /* iLearnApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iLearnApp.swift; sourceTree = "<group>"; };
-		704F958A2CAB215000F253CC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		704F958C2CAB215100F253CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		704F958F2CAB215100F253CC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		707F8F332CB3062C009A69C8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		70F92B0A2CCE6C7F00CB3478 /* ThemesContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ThemesContainer.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		70DF2BD72CD007FA000D433C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				coreData/CoreDataManager.swift,
+				coreData/CoreDataRelationshipViewModel.swift,
+				views/ThemeView.swift,
+				views/ThemeWordsView.swift,
+			);
+			target = 704F95842CAB215000F253CC /* iLearn */;
+		};
+		70DF2BD82CD007FC000D433C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				iLearnApp.swift,
+			);
+			target = 704F95842CAB215000F253CC /* iLearn */;
+		};
+		70DF2BDA2CD00809000D433C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Assets.xcassets,
+				"GoogleService-Info.plist",
+				ThemesContainer.xcdatamodeld,
+			);
+			target = 704F95842CAB215000F253CC /* iLearn */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		70DF2BD42CD007EA000D433C /* appFunc */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (70DF2BD72CD007FA000D433C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = appFunc; sourceTree = "<group>"; };
+		70DF2BD62CD007F4000D433C /* delegate */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (70DF2BD82CD007FC000D433C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = delegate; sourceTree = "<group>"; };
+		70DF2BD92CD00800000D433C /* extra */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (70DF2BDA2CD00809000D433C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = extra; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		704F95822CAB215000F253CC /* Frameworks */ = {
@@ -55,11 +80,9 @@
 		704F95872CAB215000F253CC /* iLearn */ = {
 			isa = PBXGroup;
 			children = (
-				704F95882CAB215000F253CC /* iLearnApp.swift */,
-				704F958A2CAB215000F253CC /* ContentView.swift */,
-				704F958C2CAB215100F253CC /* Assets.xcassets */,
-				707F8F332CB3062C009A69C8 /* GoogleService-Info.plist */,
-				70F92B092CCE6C7F00CB3478 /* ThemesContainer.xcdatamodeld */,
+				70DF2BD92CD00800000D433C /* extra */,
+				70DF2BD62CD007F4000D433C /* delegate */,
+				70DF2BD42CD007EA000D433C /* appFunc */,
 				704F958E2CAB215100F253CC /* Preview Content */,
 			);
 			path = iLearn;
@@ -136,8 +159,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				704F95902CAB215100F253CC /* Preview Assets.xcassets in Resources */,
-				704F958D2CAB215100F253CC /* Assets.xcassets in Resources */,
-				707F8F342CB3062C009A69C8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,9 +169,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				704F958B2CAB215000F253CC /* ContentView.swift in Sources */,
-				704F95892CAB215000F253CC /* iLearnApp.swift in Sources */,
-				70F92B0B2CCE6C7F00CB3478 /* ThemesContainer.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,19 +376,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		70F92B092CCE6C7F00CB3478 /* ThemesContainer.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				70F92B0A2CCE6C7F00CB3478 /* ThemesContainer.xcdatamodel */,
-			);
-			currentVersion = 70F92B0A2CCE6C7F00CB3478 /* ThemesContainer.xcdatamodel */;
-			path = ThemesContainer.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 704F957D2CAB215000F253CC /* Project object */;
 }

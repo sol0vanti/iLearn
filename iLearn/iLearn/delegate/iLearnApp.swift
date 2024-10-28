@@ -12,7 +12,7 @@ struct iLearnApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ThemeView()
         }
     }
 }
