@@ -142,10 +142,17 @@ struct PlayModeView: View {
     var body: some View {
         NavigationStack {
             if let words = entity.words?.allObjects as? [WordEntity] {
-                Text("Words:")
-                    .bold()
-                ForEach(words) { word in
-                    Text("\(word.mainWord ?? "error saving data") - \(word.translatedWord ?? "error saving data")")
+                List {
+                    if !words.isEmpty {
+                        Section("Words:") {
+                            ForEach(words) { word in
+                                Text("\(word.mainWord ?? "error saving data") - \(word.translatedWord ?? "error saving data")")
+                            }
+                        }
+                    } else {
+                        Text("No words yet")
+                            .multilineTextAlignment(.center)
+                    }
                 }
             }
             Button {
@@ -171,7 +178,6 @@ struct PlayModeView: View {
                 TextField("Main word", text: $alertMainWordTextFieldText)
                 TextField("Translated word", text: $alertTranslatedWordTextFieldText)
             }
-            Spacer()
         }
         .navigationTitle(entity.name ?? "error retrieving data")
     }
