@@ -27,6 +27,9 @@ struct ThemeView: View {
                     } label: {
                         Text(theme.name!) // Create a title for List element
                     }
+                } .onDelete { offsets in
+                    vm.deleteTheme(at: offsets)
+                    vm.themes.remove(atOffsets: offsets)
                 }
             }
             .navigationTitle("All Themes")
