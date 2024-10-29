@@ -16,6 +16,8 @@ struct WordsPracticeView: View {
     @State var checkText: String = ""
     @State var checkTextColor: Color = .white
     @State var buttonText: String = "Check"
+    @State var showExitAlert: Bool = false
+    @Environment(\.dismiss) var dismiss
     let entity: ThemeEntity
     
     var body: some View {
@@ -43,14 +45,24 @@ struct WordsPracticeView: View {
             .onAppear {
                 getRandomizedWord()
             }
+            .alert(
+                Text("You have finished the practice"),
+                isPresented: $showExitAlert
+            ) {
+                Button("exit", role: .cancel) {
+                    dismiss()
+                }
+            }
     }
     
     func getRandomizedWord() {
         if let words = entity.words?.allObjects as? [WordEntity] {
-            if !words.isEmpty {
+            if wordCount < words.count {
                 let currentWordsSet = words[wordCount]
                 mainWord = currentWordsSet.mainWord ?? "error getting data"
                 translatedWord = currentWordsSet.translatedWord ?? "error getting data"
+            } else {
+                showExitAlert = true
             }
         }
     }
