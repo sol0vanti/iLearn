@@ -23,6 +23,7 @@
 				coreData/CoreDataRelationshipViewModel.swift,
 				views/ThemeView.swift,
 				views/ThemeWordsView.swift,
+				views/WordsPractiseView.swift,
 			);
 			target = 704F95842CAB215000F253CC /* iLearn */;
 		};

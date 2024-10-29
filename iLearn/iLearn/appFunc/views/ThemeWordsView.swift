@@ -14,6 +14,7 @@ struct ThemeWordsView: View {
     @State var showAddWordAlert: Bool = false
     @State var alertMainWordTextFieldText: String = ""
     @State var alertTranslatedWordTextFieldText: String = ""
+    @State var showPractiseAlert: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -59,5 +60,23 @@ struct ThemeWordsView: View {
             }
         }
         .navigationTitle(entity.name ?? "error retrieving data")
+        .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            Button( action: {
+                showPractiseAlert = true
+            }) {
+                Image(systemName: "flag.checkered")
+            }
+        } .confirmationDialog(
+            "Practise Time",
+            isPresented: $showPractiseAlert,
+            titleVisibility: .visible
+        ) {
+            NavigationLink("Main to Translated") {
+                WordsPractiseView()
+            }
+        } message: {
+            Text("Select prefarable practise mode")
+        }
     }
 }
