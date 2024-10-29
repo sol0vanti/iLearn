@@ -68,12 +68,12 @@ struct ThemeWordsView: View {
                 Image(systemName: "flag.checkered")
             }
         } .confirmationDialog(
-            "Practise Time",
+            "Practice Time",
             isPresented: $showPractiseAlert,
             titleVisibility: .visible
         ) {
             NavigationLink("Main to Translated") {
-                WordsPractiseView()
+                WordsPracticeView()
             }
         } message: {
             Text("Select prefarable practise mode")
