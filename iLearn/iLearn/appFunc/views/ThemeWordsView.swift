@@ -73,7 +73,7 @@ struct ThemeWordsView: View {
             titleVisibility: .visible
         ) {
             NavigationLink("Main to Translated") {
-                WordsPracticeView()
+                WordsPracticeView(entity: entity)
             }
         } message: {
             Text("Select prefarable practise mode")
