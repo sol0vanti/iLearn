@@ -12,13 +12,16 @@ struct WordsPracticeView: View {
     @State var textFieldText: String = ""
     @State var wordCount: Int = 0
     @State var mainWord = ""
-    @State var translatedWord = ""
+    @State var targetWord = ""
     @State var checkText: String = ""
     @State var checkTextColor: Color = .white
     @State var buttonText: String = "Check"
     @State var showExitAlert: Bool = false
     @Environment(\.dismiss) var dismiss
     let entity: ThemeEntity
+    let practiceMode: String
+    @State var practiceStage: String = "Check"
+    @State var isCheckTextHidden: Bool = true
     
     var body: some View {
         Spacer()
@@ -28,14 +31,16 @@ struct WordsPracticeView: View {
             .padding(.horizontal, 25)
             .textFieldStyle(.roundedBorder)
         Spacer()
-        Text(checkText)
-            .font(.system(size: 14))
-            .foregroundStyle(checkTextColor)
-            .bold()
+        if isCheckTextHidden == false {
+            Text(checkText)
+                .font(.system(size: 14))
+                .foregroundStyle(checkTextColor)
+                .bold()
+        }
         Button {
             checkWords()
         } label: {
-            Text(buttonText)
+            Text(practiceStage)
                 .frame(maxWidth: .infinity)
                 .padding(2)
                 .bold()
@@ -56,32 +61,45 @@ struct WordsPracticeView: View {
     }
     
     func getRandomizedWord() {
-        if let words = entity.words?.allObjects as? [WordEntity] {
-            if wordCount < words.count {
-                let currentWordsSet = words[wordCount]
+        guard let words = entity.words?.allObjects as? [WordEntity], wordCount < words.count else  {
+            showExitAlert = true
+            return
+        }
+        
+        let currentWordsSet = words[wordCount]
+    
+        switch practiceMode {
+            case "mainToTranslated":
                 mainWord = currentWordsSet.mainWord ?? "error getting data"
-                translatedWord = currentWordsSet.translatedWord ?? "error getting data"
-            } else {
+                targetWord = currentWordsSet.translatedWord ?? "error getting data"
+            case "translatedToMain":
+                mainWord = currentWordsSet.translatedWord ?? "error getting data"
+                targetWord = currentWordsSet.mainWord ?? "error getting data"
+            default:
                 showExitAlert = true
-            }
         }
     }
     
     func checkWords() {
-        if buttonText == "Check" {
-            if textFieldText == translatedWord {
+        switch practiceStage {
+            case "Check" :
+                isCheckTextHidden = false
+                guard textFieldText == targetWord else {
+                    checkText = "Incorrect"
+                    checkTextColor = .red
+                    return
+                }
                 checkText = "Correct"
                 checkTextColor = .green
                 wordCount += 1
-                buttonText = "Next"
-            } else {
-                checkText = "Incorrect"
-                checkTextColor = .red
-            }
-        } else if buttonText == "Next" {
-            checkTextColor = .white
-            getRandomizedWord()
-            buttonText = "Check"
+                practiceStage = "Next"
+            case "Next":
+                isCheckTextHidden = true
+                textFieldText = ""
+                practiceStage = "Check"
+                getRandomizedWord()
+            default:
+                return
         }
     }
 }
