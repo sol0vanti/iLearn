@@ -7,6 +7,49 @@
 
 import SwiftUI
 
+enum PracticeStage {
+    case check, next
+    
+    func changeButtonText(textToCheck: String, textToVerifyFrom: String) -> String {
+        switch self {
+        case .check:
+            if textToCheck == textToVerifyFrom {
+                return "Next"
+            } else {
+                return "Check"
+            }
+        case .next:
+            return "Check"
+        }
+    }
+    
+    func changeCheckText(textToCheck: String, textToVerifyFrom: String) -> String {
+        switch self {
+        case .check:
+            if textToCheck == textToVerifyFrom {
+                return "Correct"
+            } else {
+                return "Incorrect"
+            }
+        case .next:
+            return ""
+        }
+    }
+    
+    func changeCheckTextColor(textToCheck: String, textToVerifyFrom: String) -> Color {
+        switch self {
+        case .check:
+            if textToCheck == textToVerifyFrom {
+                return .green
+            } else {
+                return .red
+            }
+        case .next:
+            return .clear
+        }
+    }
+}
+
 struct WordsPracticeView: View {
     @StateObject var vm = CoreDataRelationshipViewModel()
     @State var textFieldText: String = ""
@@ -15,13 +58,13 @@ struct WordsPracticeView: View {
     @State var targetWord = ""
     @State var checkText: String = ""
     @State var checkTextColor: Color = .white
-    @State var buttonText: String = "Check"
     @State var showExitAlert: Bool = false
     @Environment(\.dismiss) var dismiss
     let entity: ThemeEntity
     let practiceMode: String
-    @State var practiceStage: String = "Check"
+    @State var buttonText: String = "Check"
     @State var isCheckTextHidden: Bool = true
+    @State var buttonPattern = PracticeStage.check
     
     var body: some View {
         Spacer()
@@ -31,16 +74,14 @@ struct WordsPracticeView: View {
             .padding(.horizontal, 25)
             .textFieldStyle(.roundedBorder)
         Spacer()
-        if isCheckTextHidden == false {
-            Text(checkText)
-                .font(.system(size: 14))
-                .foregroundStyle(checkTextColor)
-                .bold()
-        }
+        Text(checkText)
+            .font(.system(size: 14))
+            .foregroundStyle(checkTextColor)
+            .bold()
         Button {
             checkWords()
         } label: {
-            Text(practiceStage)
+            Text(buttonText)
                 .frame(maxWidth: .infinity)
                 .padding(2)
                 .bold()
@@ -81,25 +122,23 @@ struct WordsPracticeView: View {
     }
     
     func checkWords() {
-        switch practiceStage {
-            case "Check" :
-                isCheckTextHidden = false
-                guard textFieldText == targetWord else {
-                    checkText = "Incorrect"
-                    checkTextColor = .red
-                    return
-                }
-                checkText = "Correct"
-                checkTextColor = .green
+        switch buttonPattern {
+        case .check:
+            buttonText = buttonPattern.changeButtonText(textToCheck: textFieldText, textToVerifyFrom: targetWord)
+            checkText = buttonPattern.changeCheckText(textToCheck: textFieldText, textToVerifyFrom: targetWord)
+            checkTextColor = buttonPattern.changeCheckTextColor(textToCheck: textFieldText, textToVerifyFrom: targetWord)
+            print(checkTextColor)
+            if textFieldText == targetWord {
+                buttonPattern = PracticeStage.next
+                print(buttonPattern)
                 wordCount += 1
-                practiceStage = "Next"
-            case "Next":
-                isCheckTextHidden = true
-                textFieldText = ""
-                practiceStage = "Check"
-                getRandomizedWord()
-            default:
-                return
+            }
+        case .next:
+            buttonText = buttonPattern.changeButtonText(textToCheck: textFieldText, textToVerifyFrom: targetWord)
+            checkText = buttonPattern.changeCheckText(textToCheck: textFieldText, textToVerifyFrom: targetWord)
+            checkTextColor = buttonPattern.changeCheckTextColor(textToCheck: textFieldText, textToVerifyFrom: targetWord)
+            buttonPattern = PracticeStage.check
+            getRandomizedWord()
         }
     }
 }
